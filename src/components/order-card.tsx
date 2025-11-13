@@ -2,7 +2,7 @@ import type { Order } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Clock, Tag, Hash, Utensils } from 'lucide-react';
+import { Clock, Tag, Hash, Utensils, User } from 'lucide-react';
 import { outlets } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { cva } from 'class-variance-authority';
@@ -50,7 +50,11 @@ export default function OrderCard({ order, isStaffView = false }: OrderCardProps
             {order.status}
           </Badge>
         </div>
-        {!isStaffView && outlet && (
+        {isStaffView ? (
+           <div className="flex items-center gap-2 pt-2 text-sm text-muted-foreground">
+             <User className="h-4 w-4" /> <span>{order.clientName} ({order.clientId})</span>
+           </div>
+        ) : outlet && (
             <div className="flex items-center gap-2 pt-2 text-sm text-muted-foreground">
                 <Utensils className="h-4 w-4" /> {outlet.name}
             </div>

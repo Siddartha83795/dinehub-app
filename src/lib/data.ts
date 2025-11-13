@@ -1,4 +1,4 @@
-import type { Outlet, MenuItem, Order } from './types';
+import type { Outlet, MenuItem, Order, UserProfile } from './types';
 
 export const outlets: Outlet[] = [
   {
@@ -160,6 +160,8 @@ export const orders: Order[] = [
     status: 'preparing',
     estimatedWaitTime: 15,
     createdAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+    clientName: 'Alice',
+    clientId: 'user-alice-123'
   },
   {
     id: 'order-2',
@@ -171,6 +173,8 @@ export const orders: Order[] = [
     status: 'ready',
     estimatedWaitTime: 10,
     createdAt: new Date(Date.now() - 12 * 60 * 1000).toISOString(),
+    clientName: 'Bob',
+    clientId: 'user-bob-456'
   },
   {
     id: 'order-3',
@@ -182,6 +186,8 @@ export const orders: Order[] = [
     status: 'completed',
     estimatedWaitTime: 20,
     createdAt: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+    clientName: 'Charlie',
+    clientId: 'user-charlie-789'
   },
     {
     id: 'order-4',
@@ -193,5 +199,16 @@ export const orders: Order[] = [
     status: 'pending',
     estimatedWaitTime: 12,
     createdAt: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
+    clientName: 'David',
+    clientId: 'user-david-012'
   },
 ];
+
+
+export const mockUserProfile: UserProfile = {
+  id: 'user-12345',
+  name: 'John Doe',
+  email: 'john.doe@example.com',
+  phone: '+919876543210',
+  address: '123, Foodie Lane, Gourmet City, 110001'
+};

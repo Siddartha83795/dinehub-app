@@ -3,11 +3,21 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, UtensilsCrossed, User } from 'lucide-react';
+import { Menu, UtensilsCrossed, User, ShoppingCart, LogOut, LayoutDashboard } from 'lucide-react';
 import { useCart } from '@/context/cart-context';
-import { ShoppingCart } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+
 
 const navLinks = [
   { href: '/outlets', label: 'Outlets' },
@@ -16,7 +26,24 @@ const navLinks = [
 
 export default function Header() {
   const { itemCount } = useCart();
-  const isLoggedIn = false; // Replace with actual auth state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    // This is a simple simulation of checking auth state.
+    // In a real app, you would check a token, a cookie, or an auth provider's state.
+    if (typeof window !== 'undefined') {
+        const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        setIsLoggedIn(loggedIn);
+    }
+  }, [pathname]); // Rerun on route change
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    setIsLoggedIn(false);
+    router.push('/auth/login');
+  };
   
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -53,12 +80,29 @@ export default function Header() {
           </Button>
 
           {isLoggedIn ? (
-             <Button asChild variant="ghost" size="icon">
-              <Link href="/profile">
-                  <User className="h-5 w-5"/>
-                  <span className="sr-only">Profile</span>
-              </Link>
-            </Button>
+             <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <User className="h-5 w-5"/>
+                    <span className="sr-only">Profile</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile"><User className="mr-2 h-4 w-4" />Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/orders"><LayoutDashboard className="mr-2 h-4 w-4" />My Orders</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
           ) : (
             <Button asChild variant="default" className='hidden md:inline-flex'>
               <Link href="/auth/login">

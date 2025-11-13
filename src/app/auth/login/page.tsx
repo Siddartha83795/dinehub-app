@@ -52,6 +52,7 @@ export default function LoginPage() {
 
     const onClientSubmit: SubmitHandler<ClientFormValues> = (data) => {
         console.log("Client Login Data:", data);
+        localStorage.setItem('isLoggedIn', 'true');
         toast({
             title: "Client Login Successful",
             description: "Welcome back!",
@@ -61,6 +62,7 @@ export default function LoginPage() {
 
     const onStaffSubmit: SubmitHandler<StaffFormValues> = (data) => {
         if (data.username === 'admin' && data.password === 'admin123') {
+            localStorage.setItem('isLoggedIn', 'true');
             toast({
                 title: "Staff Login Successful",
                 description: "Redirecting to dashboard...",
