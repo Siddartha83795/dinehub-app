@@ -43,3 +43,4 @@ jobs:
     # Runs the build script
     - name: Build Project
       run: npm run build
+
