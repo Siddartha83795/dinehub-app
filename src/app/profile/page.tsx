@@ -12,7 +12,7 @@ import { z } from 'zod';
 import { mockUserProfile } from '@/lib/data';
 import { User, Mail, Phone, Home } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { UserProfile } from '@/lib/types';
 
 const profileSchema = z.object({
@@ -31,15 +31,13 @@ export default function ProfilePage() {
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
-    defaultValues: {
-      name: userProfile.name,
-      email: userProfile.email,
-      phone: userProfile.phone,
-      address: userProfile.address || '',
-    },
-    // This will reset the form with new values when userProfile state changes
-    values: userProfile 
+    defaultValues: userProfile,
   });
+  
+  useEffect(() => {
+    form.reset(userProfile);
+  }, [userProfile, form]);
+
 
   function onSubmit(data: ProfileFormValues) {
     console.log('Profile updated:', data);
