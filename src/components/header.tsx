@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -26,18 +25,16 @@ const navLinks = [
 
 export default function Header() {
   const { itemCount } = useCart();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   
   useEffect(() => {
     setIsClient(true);
-    // This is a simple simulation of checking auth state.
-    // In a real app, you would check a token, a cookie, or an auth provider's state.
     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
     setIsLoggedIn(loggedIn);
-  }, [pathname]); // Rerun on route change
+  }, [pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
@@ -67,7 +64,7 @@ export default function Header() {
             ))}
           </nav>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-end gap-2">
            <ThemeToggle />
           <Button asChild variant="ghost" size="icon" className="relative">
               <Link href="/cart">
@@ -81,72 +78,76 @@ export default function Header() {
               </Link>
           </Button>
 
-          {isClient && isLoggedIn ? (
-             <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <User className="h-5 w-5"/>
-                    <span className="sr-only">Profile</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/profile"><User className="mr-2 h-4 w-4" />Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/orders"><LayoutDashboard className="mr-2 h-4 w-4" />My Orders</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-          ) : isClient ? (
-            <Button asChild variant="default" className='hidden md:inline-flex'>
-              <Link href="/auth/login">
-                Login
-              </Link>
-            </Button>
-          ) : null}
-
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right">
-              <nav className="grid gap-6 text-lg font-medium mt-8">
-                <Link
-                  href="/"
-                  className="flex items-center gap-2 text-lg font-semibold"
-                >
-                  <UtensilsCrossed className="h-6 w-6 text-primary" />
-                  <span className="font-headline">DineHub</span>
-                </Link>
-                {isClient && isLoggedIn && navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-                 {isClient && !isLoggedIn && <Link
-                    href={'/auth/login'}
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                  >
+          {isClient && (
+            <>
+              {isLoggedIn ? (
+                 <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <User className="h-5 w-5"/>
+                        <span className="sr-only">Profile</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link href="/profile"><User className="mr-2 h-4 w-4" />Profile</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/orders"><LayoutDashboard className="mr-2 h-4 w-4" />My Orders</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout}>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+              ) : (
+                <Button asChild variant="default" className='hidden md:inline-flex'>
+                  <Link href="/auth/login">
                     Login
-                  </Link>}
-              </nav>
-            </SheetContent>
-          </Sheet>
+                  </Link>
+                </Button>
+              )}
+
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="md:hidden">
+                    <Menu className="h-6 w-6" />
+                    <span className="sr-only">Toggle Menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right">
+                  <nav className="grid gap-6 text-lg font-medium mt-8">
+                    <Link
+                      href="/"
+                      className="flex items-center gap-2 text-lg font-semibold"
+                    >
+                      <UtensilsCrossed className="h-6 w-6 text-primary" />
+                      <span className="font-headline">DineHub</span>
+                    </Link>
+                    {isLoggedIn && navLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                     {!isLoggedIn && <Link
+                        href={'/auth/login'}
+                        className="text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        Login
+                      </Link>}
+                  </nav>
+                </SheetContent>
+              </Sheet>
+            </>
+          )}
         </div>
       </div>
     </header>
