@@ -32,8 +32,7 @@ export default function Header() {
   
   useEffect(() => {
     setIsClient(true);
-    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    setIsLoggedIn(loggedIn);
+    setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true');
   }, [pathname]);
 
   const handleLogout = () => {
@@ -64,7 +63,7 @@ export default function Header() {
             ))}
           </nav>
         </div>
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex flex-1 items-center justify-end gap-2">
            <ThemeToggle />
           <Button asChild variant="ghost" size="icon" className="relative">
               <Link href="/cart">
