@@ -48,24 +48,26 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
-        <Link href="/" className="mr-6 flex items-center space-x-2">
-          <UtensilsCrossed className="h-6 w-6 text-primary" />
-          <span className="font-bold font-headline tracking-wide sm:inline-block">
-            DineHub
-          </span>
-        </Link>
-        <nav className="hidden gap-6 md:flex flex-1">
-          {isLoggedIn && navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-foreground/60 transition-colors hover:text-foreground"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="flex flex-1 items-center justify-end gap-2">
+        <div className="flex-1 flex items-center">
+          <Link href="/" className="mr-6 flex items-center space-x-2">
+            <UtensilsCrossed className="h-6 w-6 text-primary" />
+            <span className="font-bold font-headline tracking-wide sm:inline-block">
+              DineHub
+            </span>
+          </Link>
+          <nav className="hidden gap-6 md:flex">
+            {isLoggedIn && navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium text-foreground/60 transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+        <div className="flex items-center justify-end gap-2">
            <ThemeToggle />
           <Button asChild variant="ghost" size="icon" className="relative">
               <Link href="/cart">
