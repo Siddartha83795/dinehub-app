@@ -81,7 +81,7 @@ export default function Header() {
             </Button>
           )}
 
-          {isClient && (
+          {isClient ? (
             <>
               {isLoggedIn ? (
                  <DropdownMenu>
@@ -150,6 +150,8 @@ export default function Header() {
                 </SheetContent>
               </Sheet>
             </>
+          ) : (
+            <div className="h-10 w-[160px] md:w-[210px]" /> // Placeholder to prevent layout shift
           )}
         </div>
       </div>
