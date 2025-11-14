@@ -27,16 +27,16 @@ const navLinks = [
 export default function Header() {
   const { itemCount } = useCart();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-
+  
   useEffect(() => {
+    setIsClient(true);
     // This is a simple simulation of checking auth state.
     // In a real app, you would check a token, a cookie, or an auth provider's state.
-    if (typeof window !== 'undefined') {
-        const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-        setIsLoggedIn(loggedIn);
-    }
+    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    setIsLoggedIn(loggedIn);
   }, [pathname]); // Rerun on route change
 
   const handleLogout = () => {
@@ -56,7 +56,7 @@ export default function Header() {
             </span>
           </Link>
           <nav className="hidden gap-6 md:flex">
-            {isLoggedIn && navLinks.map((link) => (
+            {isClient && isLoggedIn && navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -72,7 +72,7 @@ export default function Header() {
           <Button asChild variant="ghost" size="icon" className="relative">
               <Link href="/cart">
                   <ShoppingCart className="h-5 w-5"/>
-                  {isLoggedIn && itemCount > 0 && (
+                  {isClient && isLoggedIn && itemCount > 0 && (
                       <span className="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
                           {itemCount}
                       </span>
@@ -81,7 +81,7 @@ export default function Header() {
               </Link>
           </Button>
 
-          {isLoggedIn ? (
+          {isClient && isLoggedIn ? (
              <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon">
@@ -105,13 +105,13 @@ export default function Header() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-          ) : (
+          ) : isClient ? (
             <Button asChild variant="default" className='hidden md:inline-flex'>
               <Link href="/auth/login">
                 Login
               </Link>
             </Button>
-          )}
+          ) : null}
 
           <Sheet>
             <SheetTrigger asChild>
@@ -129,7 +129,7 @@ export default function Header() {
                   <UtensilsCrossed className="h-6 w-6 text-primary" />
                   <span className="font-headline">DineHub</span>
                 </Link>
-                {navLinks.map((link) => (
+                {isClient && isLoggedIn && navLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -138,12 +138,12 @@ export default function Header() {
                     {link.label}
                   </Link>
                 ))}
-                 <Link
+                 {isClient && !isLoggedIn && <Link
                     href={'/auth/login'}
                     className="text-muted-foreground transition-colors hover:text-foreground"
                   >
                     Login
-                  </Link>
+                  </Link>}
               </nav>
             </SheetContent>
           </Sheet>
