@@ -117,7 +117,7 @@ export default function Header() {
             </Button>
           )}
 
-          {isLoggedIn ? (
+          {isLoggedIn && pathname !== '/' ? (
              <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon">
@@ -161,6 +161,7 @@ export default function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
           ) : (
+            isLoggedIn && pathname === '/' ? null :
             <Button asChild variant="default" className='hidden md:inline-flex'>
               <Link href="/auth/login">
                 Login
